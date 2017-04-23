@@ -1,0 +1,2 @@
+# For Android tethering. 
+ACTION=="add|remove", SUBSYSTEM=="net", RUN+="/usr/bin/systemctl restart systemd-networkd.service"
