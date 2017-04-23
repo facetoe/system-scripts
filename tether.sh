@@ -6,12 +6,16 @@ if ! [ $(id -u) = 0 ]; then
 fi
 
 INTERFACE=$(ls -d /sys/class/net/enp0* | cut -d '/' -f 5)
+if [ -z "${INTERFACE}" ]; then
+    echo "No interfaces found.."
+    exit 1
+fi
 
 ip link set dev ${INTERFACE} up
-if ! pgrep -x "dhclient" > /dev/null
-then
-    dhclient -v ${INTERFACE}
+if pgrep -x "dhclient" > /dev/null; then
+    dhclient -r
 fi
+dhclient -v ${INTERFACE}
 
 # Stops connection dying when phone sleeps
 adb shell 'svc power stayon usb'
